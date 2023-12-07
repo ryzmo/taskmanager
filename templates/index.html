@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    
+    <title>Task Manager</title>
+</head>
+<body>
+    <div class="watermark">Copyright Hnn 2023</div>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <div class="form-container">
+            <form action="/add_task" method="POST">
+                <input type="text" name="task_content" placeholder="Tambahkan tugas" required>
+                <input type="date" name="task_deadline" required>
+                <textarea name="task_description" placeholder="Tambahkan keterangan"></textarea>
+                <select name="task_priority">
+                    <option value="low">Rendah</option>
+                    <option value="medium">Sedang</option>
+                    <option value="high">Tinggi</option>
+                </select>
+                <button type="submit">Tambah</button>
+            </form>
+        </div>
+        <div class="task-list">
+            <ul>
+                {% for task in tasks %}
+                    <li id="task_{{ loop.index0 }}" class="{{ task.priority }} {% if task.deadline %}with-deadline{% endif %}">
+                        <span>{{ task.content }}</span>
+                        <span class="description">{{ task.description }}</span> <!-- Pastikan ini ada -->
+                        {% if task.deadline %}
+                            - Tenggat: <span>{{ task.deadline }}</span>
+                        {% endif %}
+                        <span class="priority-label">{{ task.priority }}</span>
+                        <button type="button" onclick="deleteTask('{{ loop.index0 }}')">Hapus</button>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+        </div>
+    </div>
+    <script>
+        function deleteTask(taskIndex) {
+            console.log('Deleting task with index:', taskIndex);
+    
+            fetch(`/delete_task/${taskIndex}`, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then(data => {
+                    console.log('Response from server:', data);
+    
+                    if (data.status === 'success') {
+                        // Hapus elemen tugas dari DOM
+                        const taskElement = document.getElementById(`task_${taskIndex}`);
+                        console.log('Task element to remove:', taskElement);
+    
+                        if (taskElement) {
+                            taskElement.remove();
+                            console.log('Task element removed successfully.');
+                        } else {
+                            console.error(`Task element with index ${taskIndex} not found.`);
+                        }
+                    } else {
+                        console.error('Failed to delete task:', data.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+    
+        // Fungsi untuk menambahkan tugas baru
+        function addTask() {
+            const taskContent = document.querySelector('input[name="task_content"]').value;
+            const taskDeadline = document.querySelector('input[name="task_deadline"]').value;
+            const taskDescription = document.querySelector('textarea[name="task_description"]').value; // Ambil nilai deskripsi
+            const taskPriority = document.querySelector('select[name="task_priority"]').value;
+    
+            // Pastikan taskContent dan taskDeadline tidak kosong sebelum menambahkan tugas
+            if (taskContent && taskDeadline) {
+                // Perbarui objek tugas dengan deskripsi
+                const newTask = {
+                    content: taskContent,
+                    deadline: taskDeadline,
+                    description: taskDescription,  // Sertakan deskripsi
+                    priority: taskPriority
+                };
+    
+                tasks.push(newTask);  // Tambahkan tugas baru ke daftar tugas
+                renderTasks();  // Panggil fungsi untuk menampilkan ulang daftar tugas
+            } else {
+                console.error('Task content and deadline are required.');
+            }
+        }
+    
+        // Fungsi untuk merender ulang daftar tugas
+        function renderTasks() {
+            const taskList = document.querySelector('.task-list ul');
+            taskList.innerHTML = '';  // Bersihkan daftar tugas sebelum merender ulang
+    
+            tasks.forEach((task, index) => {
+                const listItem = document.createElement('li');
+                listItem.id = `task_${index}`;
+                listItem.className = `${task.priority} ${task.deadline ? 'with-deadline' : ''}`;
+    
+                const taskContent = document.createElement('span');
+                taskContent.textContent = task.content;
+    
+                const taskDescription = document.createElement('span');
+                taskDescription.className = 'description';  // Tambahkan kelas 'description'
+                taskDescription.textContent = task.description;  // Tampilkan deskripsi
+    
+                const deadlineInfo = document.createElement('span');
+                if (task.deadline) {
+                    deadlineInfo.textContent = `- Tenggat: ${task.deadline}`;
+                }
+    
+                const priorityLabel = document.createElement('span');
+                priorityLabel.className = 'priority-label';
+                priorityLabel.textContent = task.priority;
+    
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.textContent = 'Hapus';
+                deleteButton.onclick = () => deleteTask(index);
+    
+                listItem.appendChild(taskContent);
+                listItem.appendChild(taskDescription);  // Tambahkan elemen deskripsi ke dalam elemen li
+                listItem.appendChild(deadlineInfo);
+                listItem.appendChild(priorityLabel);
+                listItem.appendChild(deleteButton);
+    
+                taskList.appendChild(listItem);
+            });
+        }
+    </script>
+    
+    
+    
+    
+</body>
+</html>

@@ -1,0 +1,134 @@
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(to right, #6fa3ef, #a6c1ee, #e0dfe3, #f5efff); /* Gradasi kombinasi warna biru, ungu digital, soft, dan pastel */
+    color: #333; /* Warna teks lebih gelap */
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative; /* Tambahkan properti position relative untuk watermark */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%; /* Menyesuaikan lebar untuk tampilan lebih baik di layar kecil */
+}
+
+.form-container {
+    width: 100%; /* Lebar formulir 100% untuk tampilan responsif */
+    background: linear-gradient(to right, #f5efff, #e0dfe3);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.task-list {
+    width: 100%;
+}
+
+form {
+    margin-top: 20px;
+}
+
+input, textarea, select, button {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    background: linear-gradient(to right, #f5efff, #e0dfe3); /* Gradasi soft dan pastel untuk input */
+    color: #333;
+}
+
+button {
+    background: linear-gradient(to right, #833ab4, #6fa3ef, #a6c1ee); /* Gradasi ungu digital, biru ke soft dan pastel untuk tombol */
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background: linear-gradient(to right, #4a148c, #3a7bd5, #6fa3ef); /* Gradasi ungu digital dan biru yang lebih gelap pada hover */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: linear-gradient(to right, #f5efff, #e0dfe3);
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    color: #333;
+}
+
+/* Warna warni untuk tingkat prioritas */
+li.low {
+    border-left: 5px solid #ffd3e2;
+}
+
+li.medium {
+    border-left: 5px solid #ffb6b9;
+}
+
+li.high {
+    border-left: 5px solid #ff849b;
+}
+
+/* Keterangan dan deskripsi dengan warna lebih gelap */
+li span,
+li .description {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Keterangan prioritas dengan warna lebih terang */
+li .priority-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.watermark {
+    position: absolute;
+    top: 20px; /* Sesuaikan posisi watermark jika diperlukan */
+    left: 20px; /* Sesuaikan posisi watermark jika diperlukan */
+    font-size: 18px; /* Ukuran teks lebih besar */
+    color: rgb(255, 255, 255); /* Warna putih dengan tingkat kejernihan 70% */
+    font-weight: bold; /* Teks lebih tebal */
+}
+
+/* Tambahkan media query untuk menyesuaikan gaya sesuai dengan lebar layar */
+@media (min-width: 600px) {
+    .container {
+        width: 60%;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 50%;
+    }
+}
